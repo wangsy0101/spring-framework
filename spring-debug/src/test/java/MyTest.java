@@ -12,5 +12,6 @@ public class MyTest {
 		ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
 		UserService userService = ac.getBean("userService", UserService.class);
 		System.out.println(userService.getName());
+
 	}
 }
