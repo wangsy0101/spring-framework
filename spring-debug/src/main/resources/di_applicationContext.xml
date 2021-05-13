@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+
+    <bean id="address" class="cn.debug.di.entity.Address">
+        <property name="str" value="家庭地址"/>
+    </bean>
+
+    <bean id="address2" class="cn.debug.di.entity.Address">
+        <property name="str" value="学校地址"/>
+    </bean>
+
+
+    <bean id="student" class="cn.debug.di.entity.Student">
+        <!--普通 注入-->
+        <property name="name" value="wangsy"/>
+
+        <!--beam 注入-->
+        <property name="address" ref="address"/>
+
+        <!--数组 注入-->
+        <property name="books">
+            <array value-type="java.lang.String">
+                <value>语文</value>
+                <value>数学</value>
+                <value>英语</value>
+            </array>
+        </property>
+
+        <!--list 注入-->
+        <property name="hobbys">
+            <list>
+                <value>篮球</value>
+                <value>足球</value>
+            </list>
+        </property>
+
+        <!--list bean 注入-->
+        <property name="addressList">
+            <list>
+                <ref bean="address"></ref>
+                <ref bean="address2"></ref>
+            </list>
+        </property>
+
+        <!--map 注入-->
+        <property name="cards">
+            <map>
+                <entry key="a" value="aa"></entry>
+                <entry key="b" value="bb"></entry>
+            </map>
+        </property>
+
+        <!--set 注入-->
+        <property name="game">
+            <set>
+                <value>lol</value>
+                <value>war</value>
+            </set>
+        </property>
+
+        <!--null 注入-->
+        <property name="wife">
+            <null/>
+        </property>
+
+        <!--props 注入-->
+        <property name="info">
+            <props>
+                <prop key="1">11</prop>
+                <prop key="2">22</prop>
+            </props>
+        </property>
+    </bean>
+
+
+</beans>

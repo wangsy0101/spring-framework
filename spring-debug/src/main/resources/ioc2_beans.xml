@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <!-- 无参构造方法的注入，默认 -->
+    <!--<bean id="user" class="cn.wangsy.pojo.User">-->
+        <!--<property name="name" value="wangsy" />-->
+    <!--</bean>-->
+
+
+    <!-- 有参的构造方法，第一种方式，index传入参数 -->
+    <!--<bean id="user" class="cn.wangsy.pojo.User">-->
+        <!--<constructor-arg index="0" value="wangsy"/>-->
+    <!--</bean>-->
+
+
+    <!-- 有参的构造方法，第二种方式，类型匹配 -->
+    <!--<bean id="user" class="cn.wangsy.pojo.User">-->
+        <!--<constructor-arg type="java.lang.String" value="wangsy"/>-->
+    <!--</bean>-->
+
+
+    <!-- 有参的构造方法，第二种方式，参数指定 -->
+    <bean id="user" class="cn.debug.ioc2.entity.User">
+        <constructor-arg name="name" value="wangsy"/>
+    </bean>
+
+
+    <!-- name 也可以取别名-->
+    <bean id="userT" class="cn.debug.ioc2.entity.UserT" name="userT2,userT3 userT5">
+        <property name="name" value="wangsyT"/>
+    </bean>
+
+    <!-- alias 取别名-->
+    <alias name="userT" alias="userT4"/>
+
+</beans>

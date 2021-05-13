@@ -73,14 +73,16 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	/** Maximum number of suppressed exceptions to preserve. */
 	private static final int SUPPRESSED_EXCEPTIONS_LIMIT = 100;
 
-
 	/** Cache of singleton objects: bean name to bean instance. */
+	// 第一级缓存（单例池）
 	private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>(256);
 
 	/** Cache of singleton factories: bean name to ObjectFactory. */
+	// 第三级缓存（工厂池）
 	private final Map<String, ObjectFactory<?>> singletonFactories = new HashMap<>(16);
 
 	/** Cache of early singleton objects: bean name to bean instance. */
+	// 第二级缓存（半成品池）
 	private final Map<String, Object> earlySingletonObjects = new ConcurrentHashMap<>(16);
 
 	/** Set of registered singletons, containing the bean names in registration order. */
@@ -136,9 +138,13 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 */
 	protected void addSingleton(String beanName, Object singletonObject) {
 		synchronized (this.singletonObjects) {
+			// 1、放到第一级缓存
 			this.singletonObjects.put(beanName, singletonObject);
+			// 2、从第三级缓存移除
 			this.singletonFactories.remove(beanName);
+			// 3、从第二级缓存移除
 			this.earlySingletonObjects.remove(beanName);
+			// 4、添加到已注册bean的集合
 			this.registeredSingletons.add(beanName);
 		}
 	}
@@ -176,6 +182,10 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 * @param allowEarlyReference whether early references should be created or not
 	 * @return the registered singleton object, or {@code null} if none found
 	 */
+	// 1、从第一级缓存取
+	// 2、从第二级缓存取
+	// 3、从第三级缓存取，调用提前引用方法getEarlyBeanReference
+	// 4、取出提前引用的"(代理)对象"，将"(代理)对象"放入第二级缓存
 	@Nullable
 	protected Object getSingleton(String beanName, boolean allowEarlyReference) {
 		// Quick check for existing instance without full singleton lock
@@ -191,6 +201,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 						if (singletonObject == null) {
 							ObjectFactory<?> singletonFactory = this.singletonFactories.get(beanName);
 							if (singletonFactory != null) {
+								// wangsy: 函数接口，实际调用的是 AbstractAutowireCapableBeanFactory#getEarlyBeanReference 方法
 								singletonObject = singletonFactory.getObject();
 								this.earlySingletonObjects.put(beanName, singletonObject);
 								this.singletonFactories.remove(beanName);
@@ -231,7 +242,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 					this.suppressedExceptions = new LinkedHashSet<>();
 				}
 				try {
-					singletonObject = singletonFactory.getObject();
+					singletonObject = singletonFactory.getObject();  // 函数式接口调用，实际调用的是 AbstractBeanFactory.createBean(..)
 					newSingleton = true;
 				}
 				catch (IllegalStateException ex) {
@@ -257,6 +268,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 					afterSingletonCreation(beanName);
 				}
 				if (newSingleton) {
+					// 添加到一级缓存池
 					addSingleton(beanName, singletonObject);
 				}
 			}

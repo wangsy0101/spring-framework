@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="mysqlDao" class="cn.debug.ioc1.dao.UserMysqlDao"/>
+    <bean id="oracleDao" class="cn.debug.ioc1.dao.UserOracleDao"/>
+    <bean id="sqlServerDao" class="cn.debug.ioc1.dao.UserSqlServerDao"/>
+
+    <bean id="userService" class="cn.debug.ioc1.service.UserServiceImpl">
+        <property name="userDao" ref="oracleDao" />
+    </bean>
+</beans>

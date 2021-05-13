@@ -337,6 +337,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 			final InvocationCallback invocation) throws Throwable {
 
 		// If the transaction attribute is null, the method is non-transactional.
+		// 这里TransactionAttributeSource对象保存了应用内所有方法上的@Transactional注解属性信息,利用Map来保存
 		TransactionAttributeSource tas = getTransactionAttributeSource();
 		final TransactionAttribute txAttr = (tas != null ? tas.getTransactionAttribute(method, targetClass) : null);
 		final TransactionManager tm = determineTransactionManager(txAttr);
@@ -385,10 +386,13 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 			try {
 				// This is an around advice: Invoke the next interceptor in the chain.
 				// This will normally result in a target object being invoked.
+				// 这是环形切面，调用下一个拦截器的invoke方法
+				// 最终会调用目标方法，返回值为目标方法的返回值
 				retVal = invocation.proceedWithInvocation();
 			}
 			catch (Throwable ex) {
 				// target invocation exception
+				// 目标方法抛出了异常，根据 @Transactional 注解属性配置决定是否要回滚事务
 				completeTransactionAfterThrowing(txInfo, ex);
 				throw ex;
 			}
@@ -404,6 +408,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 				}
 			}
 
+			// 目标方法执行完成后，提交事务
 			commitTransactionAfterReturning(txInfo);
 			return retVal;
 		}
@@ -658,6 +663,9 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 	/**
 	 * Handle a throwable, completing the transaction.
 	 * We may commit or roll back, depending on the configuration.
+	 *
+	 * 处理异常
+	 * 我们可能提交或者回滚，取决于参数配置
 	 * @param txInfo information about the current transaction
 	 * @param ex throwable encountered
 	 */

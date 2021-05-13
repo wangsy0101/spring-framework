@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/aop
+       https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+
+    <bean id="userService" class="cn.debug.aop.service.UserServiceImpl"/>
+	<bean id="jsonService" class="cn.debug.aop.json.JSONService"/>
+
+    <!-- 方式一： 使用原生的spring api接口-->
+    <!--<bean id="logBefore" class="cn.wangsy.log.LogBefore"/>-->
+    <!--<bean id="logAfter" class="cn.wangsy.log.LogAfter"/>-->
+    <!--<aop:config>-->
+        <!--&lt;!&ndash;切入点&ndash;&gt;-->
+        <!--<aop:pointcut id="pointcut" expression="execution( * cn.wangsy.service.UserServiceImpl.*(..))"/>-->
+
+        <!--&lt;!&ndash;执行环绕方式&ndash;&gt;-->
+        <!--<aop:advisor advice-ref="logBefore" pointcut-ref="pointcut"/>-->
+        <!--<aop:advisor advice-ref="logAfter" pointcut-ref="pointcut"/>-->
+    <!--</aop:config>-->
+
+
+
+    <!-- 方式二： 自定义实现aop-->
+    <!--<bean id="diyPointCut" class="cn.wangsy.diy.DiyPointCut"/>-->
+    <!--<aop:config>-->
+        <!--<aop:pointcut id="pointcut" expression="execution( * cn.wangsy.service.UserServiceImpl.*(..))"/>-->
+        <!--<aop:aspect id="aspect" ref="diyPointCut">-->
+            <!--<aop:before method="before" pointcut-ref="pointcut"/>-->
+            <!--<aop:after method="after" pointcut-ref="pointcut"/>-->
+        <!--</aop:aspect>-->
+    <!--</aop:config>-->
+
+    <!-- 方式三：使用注解实现切面  AnnotationPointCut -->
+    <bean id="annotationPointCut" class="cn.debug.aop.diy.AnnotationPointCut"/>
+	<bean id="jsonAnnotationPointCut" class="cn.debug.aop.json.JSONAspect"/>
+
+    <!-- 开启注解 JDK动态代理(默认)：proxy-target-class="false"     cglib: proxy-target-class="true"-->
+    <aop:aspectj-autoproxy proxy-target-class="false"/>
+
+
+
+
+
+</beans>

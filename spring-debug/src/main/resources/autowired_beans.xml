@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        https://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <context:annotation-config/>
+
+
+    <bean id="cat1" class="cn.debug.autowired.entity.Cat"/>
+    <bean id="cat2" class="cn.debug.autowired.entity.Cat"/>
+    <bean id="dog1" class="cn.debug.autowired.entity.Dog"/>
+    <bean id="dog2" class="cn.debug.autowired.entity.Dog"/>
+    <bean id="people" class="cn.debug.autowired.entity.People" />
+
+    <!--<bean id="people" class="cn.wangsy.pojo.People">-->
+        <!--<property name="name" value="wangsy"/>-->
+        <!--<property name="cat" ref="cat"/>-->
+        <!--<property name="dog" ref="dog"/>-->
+    <!--</bean>-->
+    <!---->
+
+    <!-- byName：根据名称自动装配，需要保证bean的id唯一，并且这个beanid需要和自动注入属性的set方法的值一致 -->
+    <!--<bean id="people" class="cn.wangsy.pojo.People" autowire="byName">-->
+        <!--<property name="name" value="wangsy"/>-->
+    <!--</bean>-->
+
+
+    <!-- byType：根据类型自动装配，需要保证bean的class唯一，并且这个bean的class需要和自动注入属性的类型一致 -->
+    <!--<bean id="people1" class="cn.wangsy.pojo.People" autowire="byType">-->
+        <!--<property name="name" value="wangsy"/>-->
+    <!--</bean>-->
+
+
+</beans>
